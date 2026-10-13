@@ -1,16 +1,17 @@
 from tasks.AddTask import AddTask
-from tasks.SaveData import SaveData
 from tasks.ViewData import ViewData;
 from tasks.UpdatData import UpdateData;
 from tasks.DeleteData import DeleteTask;
+from tasks.Database import DataBase;
 def main():
     print("--- welcome to cloud task management system ---")
 
-    save = SaveData()
-    tasks = save.loadData()
+    add = AddTask();
     view = ViewData();
     update = UpdateData();
     delete = DeleteTask();
+    db = DataBase();
+    db.createTable();
 
     while True:
         print("\n1. Create a new task")
@@ -23,18 +24,12 @@ def main():
         choice = input("Enter your choice (1-6): ")
 
         if choice == "1":
-            task_name = input("Enter task name: ")
-            priority = input("Enter task priority: ")
-            status = input("Enter task status (default Pending): ") or "Pending"
-
-            new_task = AddTask(task_name, priority, status)
-            tasks.append(new_task)
-
-            save.saveData(tasks)
-            print("Task created successfully!")
+                add.addTask(db);
+            
 
         elif choice == "2":
-            view.viewData(tasks);
+            view.viewData(db);
+            
         
         elif choice == "3":
             print("what do you want to do?")
@@ -42,16 +37,14 @@ def main():
             print("2.change data")
             choic=input("Enter the choice: ")
             if choic == "1":
-                update.changeStatus(tasks,view);
+                update.changeStatus(db,view);
+
             if choic == "2":
-                update.changeData(tasks,view);
-            else:
-                print("Enter the valid choice.")
-            view.viewData(tasks);
+                update.changeData(db,view)
+                
 
         elif choice == "4":
-            delete.deleteTask(tasks,view)
-            
+            delete.deleteTask(db,view);
            
 
         elif choice == "5":
